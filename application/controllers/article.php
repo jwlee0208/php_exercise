@@ -26,10 +26,10 @@ class Article extends CI_Controller {
 			var_dump($entry);
 		}
 		*/
-		$this -> load ->view('header');
-		$this -> load ->view('article_list', array('articles'=> $articles));
-		$this -> load ->view('main');
-		$this -> load ->view('footer');
+		$this -> load ->view('article/header');
+		$this -> load ->view('article/article_list', array('articles'=> $articles));
+		$this -> load ->view('article/main');
+		$this -> load ->view('article/footer');
 	}
 
 	// http://127.0.0.1:8080/index.php/topic/get/3
@@ -42,11 +42,11 @@ class Article extends CI_Controller {
 		// 특정 article 조회
 		$article = $this -> article_model -> getArticle($id);	
 
-		$this -> load -> view('header');
+		$this -> load -> view('article/header');
 		// article list view 
-		$this -> load -> view('article_list', array('articles' => $article_list));
+		$this -> load -> view('article/article_list', array('articles' => $article_list));
 		// article view
-		$this -> load -> view('get', array('article'=>$article));
-		$this -> load -> view('footer');
+		$this -> load -> view('article/get', array('article'=>$article));
+		$this -> load -> view('article/footer');
 	}
 }
