@@ -1,0 +1,12 @@
+
+    <div class="span2">
+    	<ul class="nav nav-tabs nav-stacked" id="sidebar">
+ <?php   
+ foreach($articles as $entry){
+?>
+			<li><a href="/index.php/article/get/<?=$entry -> id?>"><?=$entry -> title?></a></li>
+ <?php			
+ }     
+ ?>	
+ 		</ul>
+    </div>
