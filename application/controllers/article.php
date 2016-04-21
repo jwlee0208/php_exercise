@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Controller : Url 을 mapping 하는 역할
 class Article extends CI_Controller {
 
+	// 생성자
 	function __construct(){
 		parent::__construct();	
 		// database library  로드
@@ -13,43 +14,56 @@ class Article extends CI_Controller {
 	}
 
 
-	// http://127.0.0.1:8080/index.php/topic
+	// URL : http://127.0.0.1:8080/index.php/topic
 	public function index()
 	{
-		#echo 'topic page';
-		
-		// model 안에 있는 메서드를 호출
-		$articles = $this -> article_model -> getArticles();
-		// 데이터 확인
-		/*
-		foreach($data as $entry){
-			var_dump($entry);
-		}
-		*/
-
-		$this -> load ->view('article/header');
-		$this -> load ->view('article/article_list', array('articles'=> $articles));
+		$this -> _header();
 		$this -> load ->view('article/main');
 		$this -> load ->view('article/footer');
 	}
 
-	// http://127.0.0.1:8080/index.php/topic/get/3
-	// $id = 3
+	// URL : http://127.0.0.1:8080/index.php/topic/get/3
+	// Parameter : $id = 3
 	public function get($id){
-		#echo "topic".$id;
-		// article list 조회
-		$article_list = $this -> article_model -> getArticles();
-		
+		$this -> _header();
 		// 특정 article 조회
 		$article = $this -> article_model -> getArticle($id);	
-
-		$this -> load -> view('article/header');
-		// article list view 
-		$this -> load -> view('article/article_list', array('articles' => $article_list));
 		// helper의 사용
 		$this->load->helper(array('url', 'HTML', 'korean'));
 		// article view
 		$this -> load -> view('article/get', array('article'=>$article));
 		$this -> load -> view('article/footer');
+	}
+	
+	// description : header에 출력되는, 공통 사항들을 별도의 메서드로 분리함.
+	function _header(){
+		$this -> load ->view('article/header');
+		// article list 조회
+		$article_list = $this -> article_model -> getArticles();
+		// article list view 
+		$this -> load -> view('article/article_list', array('articles' => $article_list));
+	}
+
+	// description : form validation을 사용
+	function add(){
+		$this -> _header();
+		// library load
+		$this -> load -> library('form_validation');
+		// class의 method 사용
+		$this -> form_validation -> set_rules('title', '제목', 'required');
+		$this -> form_validation -> set_rules('content', '내용', 'required'); 
+
+		if($this -> form_validation -> run() == FALSE){
+			// validation 결과가 false이면 write 화면으로
+			$this -> load -> view('article/add');
+		}else{
+			// validation 결과가 true이면 
+			// 1. DB 입력 수행
+			$article_id = $this -> article_model -> add($this -> input -> post('title'), $this -> input -> post('content'));
+			// 2. get(view) 화면으로  redirect
+			$this -> load ->helper('url');
+			redirect('/article/get/'.$article_id);
+		}
+		$this -> load -> view('footer');
 	}
 }
