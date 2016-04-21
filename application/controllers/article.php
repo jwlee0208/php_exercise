@@ -26,6 +26,7 @@ class Article extends CI_Controller {
 			var_dump($entry);
 		}
 		*/
+
 		$this -> load ->view('article/header');
 		$this -> load ->view('article/article_list', array('articles'=> $articles));
 		$this -> load ->view('article/main');
@@ -45,6 +46,8 @@ class Article extends CI_Controller {
 		$this -> load -> view('article/header');
 		// article list view 
 		$this -> load -> view('article/article_list', array('articles' => $article_list));
+		// helper의 사용
+		$this->load->helper(array('url', 'HTML', 'korean'));
 		// article view
 		$this -> load -> view('article/get', array('article'=>$article));
 		$this -> load -> view('article/footer');

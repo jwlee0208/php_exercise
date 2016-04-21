@@ -4,7 +4,7 @@
  <?php   
  foreach($articles as $entry){
 ?>
-			<li><a href="/index.php/article/get/<?=$entry -> id?>"><?=$entry -> title?></a></li>
+			<li><a href="/article/get/<?=$entry -> id?>"><?=$entry -> title?></a></li>
  <?php			
  }     
  ?>	
