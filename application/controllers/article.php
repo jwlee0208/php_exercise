@@ -60,10 +60,37 @@ class Article extends CI_Controller {
 			// validation 결과가 true이면 
 			// 1. DB 입력 수행
 			$article_id = $this -> article_model -> add($this -> input -> post('title'), $this -> input -> post('content'));
+
 			// 2. get(view) 화면으로  redirect
 			$this -> load ->helper('url');
 			redirect('/article/get/'.$article_id);
 		}
 		$this -> load -> view('footer');
 	}
+
+	public function upload(){
+		$config['upload_path'] = "./static/images";
+		$config['allowed_types'] = "gif|jpg|png|jpeg";
+		$config['max_size'] = "10000";
+		$config['max_width'] = "1024";
+		$config['max_height'] = "768";
+		$this -> load -> library('upload', $config);
+
+		// 2. 파일 업로드
+		if( $this -> upload -> do_upload('upload') ){
+			$CKEditorFunctionNum = $this -> input -> get('CKEditorFuncNum');	
+
+			$data = $this -> upload -> data();
+			$filename = $data['file_name'];
+
+			$url = '/static/images/'.$filename;
+			// 1. CKEditorFunction 번호
+			// 2. url : 이미지 url
+			// 3. 전송 성공 message
+			echo "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction('".$CKEditorFunctionNum."', '".$url."', '전송 성공 ')</script>";
+		}else{
+			echo "<script>alert('업로드 실패".$this -> upload ->display_errors('','')."');</script>";
+		}
+	}
+
 }
