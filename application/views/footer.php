@@ -1,3 +1,4 @@
+<link href="/static/css/footer.css" rel="stylesheet">   
 </div>
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
