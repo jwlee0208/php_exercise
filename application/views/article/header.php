@@ -26,6 +26,21 @@
                   
                       <!-- Be sure to leave the brand out there if you want it shown -->
                       <a class="brand" href="#">JavaScript</a>
+
+                      <ul class="nav pull-right">
+                      <?php 
+                        if( $this -> session ->userdata('is_login') ){
+                      ?>  
+                        <li><a href="/auth/logout">logout</a></li>
+                      <?php
+                      } else {
+                      ?>
+                        <li><a href="/auth/signin">sign in</a></li>
+                        <li><a href="/auth/signup">sign up</a></li>
+                      <?php
+                      }  
+                      ?>
+                      </ul>
                   
                       <!-- Everything you want hidden at 940px or less, place within here -->
                       <div class="nav-collapse collapse">
