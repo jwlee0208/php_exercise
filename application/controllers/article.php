@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 //Controller : Url 을 mapping 하는 역할
-class Article extends CI_Controller {
+class Article extends My_Controller {
 
 	// 생성자
 	function __construct(){
@@ -11,15 +11,21 @@ class Article extends CI_Controller {
 		$this -> load -> database();
 		// model 로드
 		$this -> load -> model('article_model');
+
+		$this -> load -> library('session');
 	}
 
 
 	// URL : http://127.0.0.1:8080/index.php/topic
 	public function index()
 	{
+		$this -> session -> all_userdata();	
+		//log_message('debug', 'all_userdata() : '.var_dump($this -> session -> all_userdata()));
+
 		$this -> _header();
 		$this -> load ->view('article/main');
-		$this -> load ->view('article/footer');
+		#$this -> load ->view('article/footer');
+		$this -> _footer();
 	}
 
 	// URL : http://127.0.0.1:8080/index.php/topic/get/3
@@ -32,7 +38,8 @@ class Article extends CI_Controller {
 		$this->load->helper(array('url', 'HTML', 'korean'));
 		// article view
 		$this -> load -> view('article/get', array('article'=>$article));
-		$this -> load -> view('article/footer');
+		#$this -> load -> view('article/footer');
+		$this -> _footer();
 	}
 	
 	// description : header에 출력되는, 공통 사항들을 별도의 메서드로 분리함.
@@ -65,9 +72,11 @@ class Article extends CI_Controller {
 			$this -> load ->helper('url');
 			redirect('/article/get/'.$article_id);
 		}
-		$this -> load -> view('footer');
+		#$this -> load -> view('footer');
+		$this -> _footer();
 	}
 
+	// ckeditor 파일 업로드
 	public function upload(){
 		$config['upload_path'] = "./static/images";
 		$config['allowed_types'] = "gif|jpg|png|jpeg";
