@@ -68,7 +68,11 @@ class Article extends My_Controller {
 			// 1. DB 입력 수행
 			$article_id = $this -> article_model -> add($this -> input -> post('title'), $this -> input -> post('content'));
 
-			// 2. get(view) 화면으로  redirect
+			// 2. batch queue에 notify_email_add_topic 추가
+			$this -> load -> model('batch_model');
+			$this -> batch_model -> add_batch_info(array('job_name'=>'notify_email_add_topic', 'context' => json_encode(array('article_id' => $article_id))));
+
+			// 3. get(view) 화면으로  redirect
 			$this -> load ->helper('url');
 			redirect('/article/get/'.$article_id);
 		}
